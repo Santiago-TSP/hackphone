@@ -1,10 +1,7 @@
 package hackphone.phone.inviteing;
 
 
-import hackphone.phone.detectors.ApiResponseOK;
-import hackphone.phone.detectors.ApiResponseRinging;
-import hackphone.phone.detectors.ApiResponseSessionProgress;
-import hackphone.phone.detectors.DetectedResponse;
+import hackphone.phone.detectors.*;
 
 import javax.sip.PeerUnavailableException;
 import javax.sip.message.Request;
@@ -45,6 +42,8 @@ public class StateInitializeInviteingSendingInviteWithAuthorization extends Stat
             stateMachineView.changeStateByInternalState(new StateInvitingFailed(stateMachineView));
         }
         if(signal.isBusyHere()) {
+            ApiResponseBusyHere busyHere = (ApiResponseBusyHere)signal.api();
+            stateMachineView.getContext().getInviteingContext().setToTag(busyHere.getToTag());
             stateMachineView.getEvents().onFailure(stateMachineView.getContext(), "Busy Here");
             stateMachineView.changeStateByInternalState(new StateInvitingFailed(stateMachineView));
         }
